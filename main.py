@@ -5,37 +5,6 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 
 
-class AddFilmWidget(QMainWindow):
-    def __init__(self, parent=None, res=[]):
-        super().__init__(parent)
-        uic.loadUi('addEditCoffeForm.ui', self)
-
-        if res:
-            self.res = res[0]
-            self.NameText.setText(str(res[0][1]))
-            self.StepenText.setText(str(res[0][2]))
-            self.MolotText.setText(str(res[0][3]))
-            self.VkysText.setText(str(res[0][4]))
-            self.SumText.setText(str(res[0][5]))
-            self.ObemText.setText(str(res[0][6]))
-            self.pushButton.clicked.connect(self.r)
-
-    def r(self):
-        if self.res[0] == 0:
-            self.con = sqlite3.connect('films_db.sqlite')
-            cur = self.con.cursor()
-            res = cur.execute(f'''SELECT id FROM films''').fetchall()
-            res = max([i[0] for i in res])
-            cur.execute(f'''INSERT INTO films(Name, Stepen, Molot, Vkys, Sum, Obem) 
-            VALUES({res + 1}, "{self.NameText.text()}", {self.StepenText.text()}, {self.MolotText.text()},
-            {self.VkysText.text()}, {self.SumText.text()}, {self.ObemText.text()})''')
-            self.con.commit()
-            self.parent().updatetab()
-            self.close()
-        else:
-            self.statusbar.showMessage('Неверно заполнена форма')
-
-
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
